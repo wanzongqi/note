@@ -1,0 +1,123 @@
+\documentclass[UTF8]{ctexart}
+\title{The Note Of  Fourier Analysis}
+\author{万宗祺}
+\date{\today}
+\usepackage{amsthm}
+\usepackage{geometry}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\geometry{left = 3.5cm,right=3.5cm,top=2.5cm,bottom=2.5cm}
+\newtheorem{dfnt}{定义}
+\newtheorem{thr}{定理}
+\newtheorem{lemma}{引理}
+\newtheorem{coro}{推论}
+\newtheorem*{note}{注}
+\newtheorem*{pro}{性质}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\section{傅里叶级数}
+\begin{dfnt}
+$f$是长度为$L$的区间$[a,b]$上的可积函数，定义第$n$阶傅里叶系数如下$$\hat{f}(n)=\frac{1}{L}\int^b_a f(x) e^{-2\pi inx/L} dx$$那么$f$的傅里叶级数定义为$$\sum_{n=-\infty}^{\infty} \hat{f} (n) e^{2\pi i nx/L}$$
+\end{dfnt}
+\begin{thr}
+$f$是圆上的可积函数，且其各阶傅里叶系数均为0。那么$f(\theta _0)=0$当$f$在$\theta _0$连续。
+\end{thr}
+\begin{note}
+思路是构造一个三角多项式族$p_k$,使得$p_k$的值集中在$\theta _0$处，再假设$f(\theta _0) > 0$,计算$\int f(\theta) p_k(\theta) d\theta$导出矛盾，这里运用的方法是卷积(convolution)，在后面会经常使用
+\end{note}
+\begin{coro}
+如果$f$在圆上连续且各阶傅里叶系数为0,那么$f=0$
+\end{coro}
+\begin{coro}
+假设$f$是圆上的连续函数，且它的傅里叶级数绝对收敛，那么，它的傅里叶级数一致收敛到$f$
+\end{coro}
+\begin{coro}
+$f$是圆上的二次连续可微函数，那么$$\hat{f} (n) = O(1/|n|^2) \quad \quad as |n| \rightarrow \infty$$从而$f$的傅里叶级数绝对一致收敛到$f$
+\end{coro}
+\begin{note}
+证明用分部积分，每次可以从$e^{-in\theta}$中析取出一个$\frac{1}{n}$，证明过程也说明了，傅里叶系数的衰减(decay)速度与函数$f$的光滑程度有关，$f$越光滑，傅里叶系数衰减速度越快
+\end{note}
+\begin{dfnt}[Holder condition]
+$f$满足序(order)为$\alpha,\alpha>1/2$的\textbf{Holder condition}，就是说:$$\sup _{\theta} |f(\theta + t)-f(\theta)| \leq A|t|^{\alpha} \quad \forall t$$如果$f$满足Holder condition，那么其傅里叶级数一致收敛，绝对收敛
+\end{dfnt}
+\begin{note}
+$C^k$与Holder condition是两种描述函数光滑性的方法
+\end{note}
+\begin{dfnt}[卷积]
+给定两个$2\pi$周期的可积函数$f,g$，定义他们的卷积$f*g$为$$(f*g)(x) = \frac{1}{2\pi}\int^{\pi}_{-\pi} f(y)g(x-y)dy = \frac{1}{2\pi}\int^{\pi}_{-\pi} f(x-y)g(y)dy$$
+\end{dfnt}
+\begin{pro}[卷积性质]
+假定$f,g,h$是以$2\pi$为周期的可积函数，那么: \\
+(i)$f*(g+h) = (f*g) + (f*h)$ \\
+(ii)$(cf)*g=c(f*g)=f*(cg)$ for any $c \in \mathbb{C}$ \\
+(iii)$f*g = g*f$  \\
+(iv)$(f*g)*h = f*(g*h)$ \\
+(v)$f*g$是连续的 \\
+(vi)$\hat{f*g}(n) = \hat{f}(n)\hat{g}(n)$ 
+\end{pro}
+\begin{lemma}[连续函数逼近]
+假定$f$在圆上可积，且有界为$B$，那么存在一个圆上的连续函数序列$\{ f_k \}^{\infty}_{k=1}$满足$$\sup _{x \in [-\pi,\pi]} |f_k(x)| \leq B \forall k \in \mathbb{N}$$和$$\int^{\pi}_{-\pi}|f(x)-f_k(x)|dx \rightarrow 0 \quad as \  k \rightarrow \infty$$
+\end{lemma}
+\begin{dfnt}[good kernel]
+\textbf{good kernels}是满足以下三个条件的kernel族$\{K_n(x)\}^{\infty}_{n=1}$\\
+(a) 对所有$n\geq 1$,$$\frac{1}{2\pi}\int^{\pi}_{-\pi}K_n(x)dx=1$$
+(b)存在$M>0$使对所有$n \geq 1$,$$\int^{\pi}_{-\pi}|K_n(x)|dx \leq M$$
+(c)对所有$\delta>0$,$$\int_{\delta \leq |x| \leq \pi} |K_n(x)|dx \rightarrow 0, \quad as \  n\rightarrow \infty$$
+\end{dfnt}
+\begin{thr}
+$\{K_n\}^{\infty}_{n=1}$是一个good kernels,$f$是圆上可积函数，那么在$f$连续处有$$\lim_{n \rightarrow \infty}(f*K_n)(x) = f(x) $$如果$f$处处连续，那么上述极限是一致的
+\end{thr}
+\begin{note}
+证明是直观的，有了这个定理后，又注意到$f$的傅里叶级数部分和可以写成$f$与Dirichlet kernels $D_N(x)$的卷积，即$S_N(f)(x)=(f*D_N)(x)$,其中dirichlet kernels为$$D_N(x) = \sum_{n=-N}^{N} e^{inx} = \frac{sin((N+\frac{1}{2})x)}{sin(x/2)}$$经过验证,令人遗憾地，Dirichlet kernels不是good kernels，这意味着傅里叶级数的收敛性不能简单的看出来（甚至可能不逐点收敛）。但是当我们对级数的定义拓展改造后，在新的意义下，傅里叶级数是逐点收敛的，这就是Cesaro求和与Abel求和。
+\end{note}
+\begin{dfnt}[Cesaro Summability]
+令$$s_n = \sum _{k=0}^{n}c_k$$$$\sigma_N = \frac{s_0+s_1+\cdots+s_{N-1}}{N}$$这里的$\sigma_N$就称作$N$级\textbf{Cesaro均值}(Cesaro mean)，其极限就是Cesaro级数的值
+\end{dfnt}
+\begin{dfnt}[Abel Summability]
+$\sum_{k=0}^{\infty}$被称作在Abel意义下收敛到$s$,当$$A(r) = \sum_{k=0}^{\infty}c_k r^k \quad (0 \leq r<1)$$收敛，且$$\lim_{r\rightarrow 1}A(r) = s$$
+\end{dfnt}
+\begin{dfnt}[Fejer kenel and Possion kernel]
+傅里叶级数在Cesaro意义下可以写成$f$与Fejer kernel的卷积，在Abel意义下可以写成$f$与Possion kernel的卷积.$$F_N(x) = \frac{D_0(x)+D_1(x)+\cdots+D_{N-1}(x)}{N} = \frac{1}{N}\frac{sin^2(Nx/2)}{sin^2(x/2)}$$$$P_r(\theta)=\sum_{n=-\infty}^{infty}r^{|n|}e^{in\theta}=\frac{1-r^2}{1-2rcos\theta}+r^2$$
+\end{dfnt}
+\begin{note}
+Fejer kernel和Possion kernel是good kernel,所以由之前的定理就可以导出傅里叶级数在Cesaro意义下和Abel意义下的逐点收敛性以及一致性。
+\end{note}
+
+\section{傅里叶级数的收敛性}
+\begin{thr}[傅里叶级数的平方均值收敛性(Mean-square convergence)]
+$f$是圆上可积函数，那么$$\frac{1}{2\pi}\int^{2\pi}_0 |f(\theta) - S_N(f)(\theta)|^2 d\theta \rightarrow 0 \quad as \  N \rightarrow \infty$$
+\end{thr}
+\begin{note}
+接下来，为了证明这个定理，书中转而研究希尔伯特空间，在对黎曼可积函数空间的研究中，发现了黎曼可积函数空间的不完备性，即一个黎曼可积函数在函数度量意义下的柯西列可以收敛到一个黎曼不可积的函数，空间的不完备性导致了Lesbegue可积的产生。通过对$\mathbb{R}$中$e_n(\theta) = e^{in\theta}$正交性的研究，以及空间中的毕达哥拉斯定理，可以得到$$||f||^2 = ||f-S_N(f)||^2 +\sum_{|n|\leq N}|a_n|^2$$又这个等式就可以知道，在N阶三角多项式中，傅里叶级数的N阶部分和是在函数空间中与$f$最接近的。由此就可以证明上述定理（用连续函数$g$逼近$f$，再用三角多项式$P_n$逼近$g$，可以知道$||f-P||<\epsilon$，再由傅里叶级数是三角多项式中最接近$f$的可以知道$||f-S_N(f)||<\epsilon$，当$N$足够大，这就证明了定理）,过程中得到了\textbf{Parseval's identity}。又由此结论直接导出\textbf{Riemann-Lesbegue 引理}
+\end{note}
+\begin{thr}[Parseval's identity]
+$$\sum_{n=-\infty}^{\infty} |a_n|^2 = \frac{1}{2\pi}\int^{2\pi}_0 |f(\theta)|^2 d\theta$$
+\end{thr}
+\begin{thr}[Riemann-Lesbegue 引理]
+$f$是圆上的可积函数，则$\hat{f} \rightarrow 0 \ \ as \ |n| \rightarrow \infty$
+\end{thr}
+\begin{lemma}[一般意义的Parseval等式]
+$F$和$G$是圆上的可积函数且$$F \sim \sum a_n e^{in\theta} \quad and \quad G \sim \sum b_ne^{in\theta}$$那么$$\frac{1}{2\pi}\int_0^{2\pi}F(\theta)\overline{G(\theta)}d\theta = \sum_{n=-\infty}^{\infty}a_n\overline{b_n}$$
+\end{lemma}
+\begin{thr}
+$f$是一个圆上的可积函数，且在$\theta_0$处可微，那么$$S_N(f)(\theta_0) \rightarrow f(\theta_0) \ as \  N \rightarrow \infty$$
+\end{thr}
+\begin{note}
+定理说明了傅里叶级数的收敛性只和这个点附件的状态有关，尽管傅里叶系数的构造用到了函数在整个圆上的取值信息
+\end{note}
+\section{傅里叶级数的应用}
+本章应用傅里叶级数解决了几个问题，这里直接给出结论
+\begin{thr}[等周不等式]
+$\Gamma$是一条$\mathbb{R}^2$上的长为$\ell$简单闭曲线，用$\mathcal{A}$表示它围城的区域面积，则$$\mathcal{A} \leq \frac{\ell^2}{4\pi}$$
+\end{thr}
+\begin{thr}[weyl 准则]
+一个$[0,1)$上的实数序列$\xi_1,\xi_2\cdots$是等距的当且仅当对所有整数$k \neq 0 $有$$\frac{1}{N}\sum_{n=1}^{N}e^{2\pi i k \xi_n} \rightarrow 0 \quad as \ N\rightarrow \infty$$
+\end{thr}
+\begin{thr}[连续却处处不可微函数]
+若$0<\alpha<1$，那么$$f_{\alpha}(x) = f(x) = \sum_{n=0}^{\infty}2^{-n\alpha}e^{i2^nx}$$是连续却处处不可微的
+\end{thr}
+\section{傅里叶变换}
+
+\end{document}

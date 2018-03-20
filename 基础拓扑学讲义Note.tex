@@ -1,0 +1,397 @@
+\documentclass[UTF8]{ctexart}
+\title{基础拓扑学讲义}
+\author{万宗祺}
+\date{\today}
+\usepackage{amsthm}
+\usepackage{geometry}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\geometry{left = 3.5cm,right=3.5cm,top=2.5cm,bottom=2.5cm}
+\newtheorem{dfnt}{定义}
+\newtheorem{thr}{定理}
+\newtheorem{lemma}{引理}
+\newtheorem*{coro}{推论}
+\newtheorem*{note}{注}
+\newtheorem{pro}{命题}
+\newcommand{\nb}{^\circ}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\section{拓扑空间与连续映射}
+\subsection{拓扑空间}
+\begin{dfnt}
+设$X$是一个非空集合。$X$的一个子集族$\tau$称为$X$的一个\textbf{拓扑}，如果它满足\\ (1)$X,\emptyset$都包含在$\tau$中；\\(2)$\tau$中任意多成员的并集仍在$\tau$中；\\(3)$\tau$中有限个成员的交集仍在$\tau$中。\\集合$X$和它的一个拓扑一起称作一个\textbf{拓扑空间}，记作($X,\tau$)。称$\tau$中的成员为拓扑空间的\textbf{开集}。
+\end{dfnt}
+\begin{dfnt}
+集合$X$上的一个\textbf{度量}$d$是一个映射$X \times X \rightarrow \mathbb{R}$，满足正定性，对称性和三角不等式。当集合上规定了一个度量$d$后，称为\textbf{度量空间}，记作$(X,d)$
+\end{dfnt}
+\begin{lemma}
+$(X,d)$的任意两个球形领域的交集是若干个球形领域的并集
+\end{lemma}
+\begin{note}
+由这个引理就可以验证$X$的子集族$\tau_d = \{U|U$是若干个球形领域的并集$\}$是$X$上的一个拓扑，称为由度量$d$决定的\textbf{度量拓扑}。
+\end{note}
+\begin{dfnt}
+拓扑空间$X$中的一个子集$A$称为\textbf{闭集},如果$A^c$是开集
+\end{dfnt}
+\begin{pro}
+拓扑空间的闭集满足:\\(1)$X$与$\emptyset$都是闭集；\\(2)任意多个闭集的交集是闭集；\\(3)有限个闭集的并集是闭集。
+\end{pro}
+\begin{dfnt}
+设$A$是拓扑空间$X$的一个子集，点$x \in A$，若存在开集$U$,使得$x\in U \subset A$，则称$x$是$A$的一个\textbf{内点}，$A$是$x$的一个\textbf{邻域}，$A$的所有内点的集合称为$A$的\textbf{内部}，记作$A^{\circ}$。
+\end{dfnt}
+\begin{pro}
+(1)若$A \subset B$，则$A\nb \subset B\nb$；\\(2)$A\nb$是包含在$A$中所有开集的并集，因此是$A$的最大开子集；\\(3)$A\nb = A \Longleftrightarrow A$是开集；\\(4)$(A \cap B)\nb = A\nb \cap B\nb$；\\(5)$(A \cup B)\nb \supset A\nb \cup B\nb$。
+\end{pro}
+\begin{dfnt}
+$A$是拓扑空间$X$的子集，$x\in X$。如果$x$的每个邻域都含有$A\backslash \{x\}$中的点，则称$x$为$A$的\textbf{聚点}。$A$的所有聚点的集合称为$A$的\textbf{导集}，记作$A'$。称集合$\overline{A}:=A \cup A'$为$A$的\textbf{闭包}。
+\end{dfnt}
+\begin{pro}
+若$X$的子集$A$与$B$互为余集，则$\overline{A}$与$B\nb$互为余集。
+\end{pro}
+\begin{pro}
+(1)若$A \subset B$，则$\overline{A} \subset \overline{B}$；\\
+(2)$\overline{A}$是所有包含$A$的闭集的交集，所以是包含$A$的最小闭集；\\(3)$\overline{A} = A \Longleftrightarrow A$是闭集；\\(4)$\overline{(A \cup B)} = \overline{A} \cup \overline{B}$；\\(5)$\overline{(A \cap B)} \supset \overline{A} \cap \overline{B}$。
+\end{pro}
+\begin{dfnt}
+$X$的子集$A$是\textbf{稠密}的，如果$\overline{A} = X$,如果$X$有可数稠密子集，则$X$是\textbf{可分拓扑空间}。
+\end{dfnt}
+\begin{dfnt}
+$\{x_n\}$是拓扑空间$X$中点的序列，如果点$x_0$的任意邻域U都包含$\{x_n\}$的几乎所有项（只有有限个不在U中），就说$\{x_n\}$收敛到$x_0$,记作$x_n \rightarrow x_0$
+\end{dfnt}
+\begin{note}
+拓扑空间中的序列可能收敛到多个点，而且若$x$是集合$A$的聚点，$A$中也不一定有序列收敛到$x$。因此，在拓扑空间中，序列失去了重要性。
+\end{note}
+\begin{dfnt}
+设$A$是拓扑空间$(X,\tau)$的一个非空子集，规定$A$的子集族$$\tau_A := \{U\cap A|U \in \tau\}$$称为$A$上的\textbf{子空间拓扑},$(A,\tau_A)$为$(X,\tau)$的子空间。
+\end{dfnt}
+\begin{pro}
+设$X$是拓扑空间，$B \subset A \subset X$，则\\(1)若$B$是$X$的开（闭）集，则$B$也是$A$的开（闭）集；\\(2)若$A$是$X$的开（闭）集，$B$是$A$的开（闭）集，则$B$也是$X$的开（闭）集
+\end{pro}
+\subsection{连续映射与同胚映射}
+\begin{dfnt}
+$X,Y$是拓扑空间，$f:X \rightarrow Y$是一个映射，$x \in X$。如果对于$Y$中$f(x)$的任一邻域$V$，$f^{-1}(V)$总是$x$的邻域，则$f$在$x$处\textbf{连续}。
+\end{dfnt}
+\begin{note}
+把定义中的任一邻域改成任一开邻域，定义的意义不变。
+\end{note}
+\begin{pro}
+设:$f:X\rightarrow Y$是一个映射，$A$是$X$的子集，$x \in X$，记$f_A =f|A:A \rightarrow Y$是$f$在$A$上的限制，则\\(1)如果$f$在x连续，则$f_A$在$x$也连续；\\(2)若$A$是$x$的邻域，则$f_A$在$x$连续时，$f$在$x$也连续。
+\end{pro}
+\begin{thr}
+设$f:X\rightarrow Y$是映射，则下列条件相互等价：\\(1)$f$是连续映射；\\(2)$Y$的任一开集在$f$下的原象是开集；\\(3)$Y$的任一闭集在$f$下的原象是闭集。
+\end{thr}
+\begin{note}
+拓扑空间中的序列收敛不能用来刻画连续性。事实上$f:X\rightarrow Y$在$x \in X$处连续，则当$x_n \rightarrow x$时，必有$f(x_n) \rightarrow f(x)$，但逆命题不成立。
+\end{note}
+\begin{pro}
+连续函数的复合函数也连续
+\end{pro}
+\begin{thr}[粘接引理]
+设$\{A_1,A_2,\cdots,A_n\}$是$X$的一个有限闭覆盖，如果映射$f:X\rightarrow Y$在每个$A_i$上的限制都是连续的，则$f$连续。
+\end{thr}
+\begin{dfnt}
+一一对应的连续映射，如果逆映射也是连续的，则称$f$是一个\textbf{同胚映射}，或\textbf{拓扑变化}，当存在$X$到$Y$的同胚映射时，就称$X,Y$\textbf{同胚}，记作$X \cong Y$
+\end{dfnt}
+\subsection{乘积空间与拓扑基}
+\begin{dfnt}
+设$\mathscr{B}$是$X$的一个子集族，规定新子集族
+\begin{align*}
+ \overline{\mathscr{B}}:&=\{U \subset X | U\mbox{是}\mathscr{B}\mbox{中若干成员的并集}\}\\
+& =\{U \subset X| \forall x \in U,\mbox{存在}B \in \mathscr{B},\mbox{使得}x\in B \subset U\}
+\end{align*}
+称$\overline{\mathscr{B}}$为$\mathscr{B}$\textbf{生成}的子集族。
+\end{dfnt}
+\begin{pro}
+$\overline{\mathscr{B}}$是$X_1 \times X_2$上的一个拓扑，其中$\mathscr{B}=\{U_1 \times U_2|U_i \in \tau_i\}$。且$\overline{\mathscr{B}}$是乘积空间上使投射连续的最小拓扑，于是将其定义为乘积空间的拓扑。
+\end{pro}
+\begin{note}
+这些定义可以推广到多个空间的乘积，并且多个空间乘积具有结合律。
+\end{note}
+\begin{thr}
+对于任何拓扑空间$Y$和映射$f:Y\rightarrow X_1 \times X_2$，$f$连续$\Longleftrightarrow f$的分量都连续。
+\end{thr}
+\begin{dfnt}
+称集合$X$的子集族$\mathscr{B}$为\textbf{集合$X$的拓扑基}，如果$\overline{\mathscr{B}}$是$X$的一个拓扑；称拓扑空间$(X,\tau)$的子集族$\mathscr{B}$为这个\textbf{拓扑空间的拓扑基}，如果$\mathscr{B}=\tau$。
+\end{dfnt}
+\begin{note}
+第一节中，度量空间的拓扑是用若干个球形邻域的并集这样的方法生成的，球形邻域就是度量空间的一个拓扑基，而拓扑基就是从这个方法中抽象出来的。
+\end{note}
+\begin{pro}
+$\mathscr{B}$是集合$X$的拓扑基的充分必要条件是:\\(1)$\displaystyle\bigcup_{B \in \mathscr{B}} B = X$；\\(2)若$B_1,B_2 \in \mathscr{B}$，则$B_1 \cap B_2 \in \overline{\mathscr{B}}$
+\end{pro}
+\begin{pro}
+$\mathscr{B}$是拓扑空间$(X,\tau)$的拓扑基的充分必要条件为:\\(1)$\mathscr{B} \subset \tau$(即$\mathscr{B}$的成员是开集)\\(2)$\tau \subset \overline{\mathscr{B}}$
+\end{pro}
+\section{几个重要的拓扑性质}
+\subsection{分离公理和可数公理}
+\begin{dfnt}[分离公理]
+ \textbf{$T_1$公理}\quad 任何两个不同点$x\mbox{和}y$，$x$有邻域不含$y$，$y$有邻域不含$x$；\\ \textbf{$T_2$公理}\quad 任何两个不同点有不相交的邻域；\\ \textbf{$T_3$公理}\quad 任意一点与不含它的任一闭集有不相交的（开）邻域；\\ \textbf{$T_4$公理}\quad 任意两个不相交的闭集有不相交的（开邻域）。
+\end{dfnt}
+\begin{dfnt}[可数公理]
+ \textbf{$C_1$公理} \quad 任一点有可数邻域基 \\ \textbf{$C_2$公理} \quad 拓扑空间有可数拓扑基
+\end{dfnt}
+\begin{note}
+如果满足$T_1$，则单点集是闭集，那么$T_4$可以推出$T_3$，$T_3$可以推出$T_2$。
+\end{note}
+\begin{pro}
+(1)$X$满足$T_1$公理 $\Longleftrightarrow$ $X$的有限子集是闭集。\\(2)作为1的推论，若$X$满足$T_1$，$A \subset X$，点$x$是$A$聚点，则$x$任一邻域与$A$的交是无穷集。\\(3)Hausdorff空间中，一个序列不会收敛到两个以上的点。
+\end{pro}
+\begin{pro}
+度量空间$(X,d)$满足所有分离公理。
+\end{pro}
+\begin{pro}
+(1)满足$T_3$公理$\Longleftrightarrow$任意点$x$和它的开邻域$W$，存在$x$的开邻域$U$，使得$\overline{U} \subset W$。\\(2)满足$T_4$公理$\Longleftrightarrow$任意闭集$A$和它的开邻域$W$，有$A$的开邻域$U$，使得$\overline{U} \subset W$
+\end{pro}
+\begin{note}
+这些命题对分离公理做了初步的刻画，非常重要，是''直觉''的来源。
+\end{note}
+\begin{pro}
+如果$X$在$x$处有可数邻域基，则$x$有可数邻域基$\{V_n\}$,使得$m>n$时，$V_m \subset V_n$。
+\end{pro}
+\begin{pro}
+若$X$是$C_1$空间,$A \subset X,x\in \overline{A}$，则$A$中存在收敛到$x$的序列。
+\end{pro}
+\begin{coro}
+若$X$是$C_1$空间，$x_0 \in X$，映射$f:X\rightarrow Y$满足:当$x_n \rightarrow x_0$时，$f(x_n) \rightarrow f(x_0)$
+\end{coro}
+\begin{note}
+此推论对应了1.2的定理一的注，逆命题在$C_1$空间是成立的，也就是说在$C_1$空间中，序列收敛可以用来刻画连续性。
+\end{note}
+\begin{pro}
+可分度量空间是$C_2$空间
+\end{pro}
+\begin{note}
+$C_2$是非常严苛的条件，以至于某些度量空间都不是$C_2$空间。度量空间是$C_1$空间，$C_2$空间是$C_1$空间，$C_2$空间是可分空间。
+\end{note}
+\begin{dfnt}
+一种拓扑性质称为有\textbf{遗传性},如果一个拓扑空间具有它，子空间也必具有它；一种拓扑性质称为有\textbf{可乘性}，如果一个两个空间都具有它，它们的乘积空间也具有它。
+\end{dfnt}
+\begin{note}
+$T_1,T_2,T_3,C_1,C_2$都具有遗传性和可乘性，$T_4$则都不具有。
+\end{note}
+\subsection{Urysohn引理}
+\begin{thr}[Urysohn引理]
+如果拓扑空间$X$满足$T_4$，则对于任意两个不相交闭集$A,B$，存在$X$上连续函数$f$，它在$A,B$上取值分别为0,1
+\end{thr}
+\begin{thr}[Tietze扩张定理]
+如果$X$满足$T_4$，则定义在$X$闭子集$F$上的连续函数可连续扩张到$X$上。
+\end{thr}
+\begin{note}
+上面两个结论实际上和$T_4$等价
+\end{note}
+\begin{dfnt}
+拓扑空间$(X,\tau)$称为\textbf{可度量化}的，如果可以在集合上规定一个度量$d$，使得$\tau_d = \tau$ \\
+则拓扑空间$X$可度量化 $\Longleftrightarrow$ 存在从$X$到一个度量空间的嵌入映射。
+\end{dfnt}
+\begin{thr}[Urysohn度量化定理]
+拓扑空间如果满足$T_1,T_4,C_2$公理，则$X$可以嵌入到Hilbert空间$E^{\omega}$中。
+\end{thr}
+\subsection{紧致性}
+\begin{dfnt}
+拓扑空间是\textbf{列紧的},如果它的每个序列有收敛的子序列。
+\end{dfnt}
+\begin{pro}
+定义在列紧空间$X$上的连续函数$f:X\rightarrow E^1$有界，并达到最大最小值。
+\end{pro}
+\begin{dfnt}
+拓扑空间是\textbf{紧致的}，如果每个开覆盖都有有限子覆盖。
+\end{dfnt}
+\begin{pro}
+紧致$C_1$空间是列紧的
+\end{pro}
+\begin{dfnt}
+度量空间$(X,d)$的子集称为$X$的一个$\delta-$网，如果$\forall x \in X,d(x,A)<\delta$，即$\displaystyle \bigcup_{a \in X}B(a,\delta) = X$
+\end{dfnt}
+\begin{pro}
+对任给$\delta > 0$，列紧度量空间存在有限的$\delta -$网
+\end{pro}
+\begin{dfnt}[Lebesgue数]
+略
+\end{dfnt}
+\begin{pro}
+$L(\mathscr{U})$是正数；当$0<\delta<L(\mathscr{U})$时，$\forall x \in X,B(x,\delta)$必包含在$\mathscr{U}$的某个开集$U$中。
+\end{pro}
+\begin{pro}
+列紧度量空间是紧致的
+\end{pro}
+\begin{note}
+以上命题说明度量空间中，列紧性与紧致性等价，接下来的命题展示紧致空间的一些性质。
+\end{note}
+\begin{pro}
+$A$是$X$的紧致子集$\Longleftrightarrow A$在$X$中的任一开覆盖有有限子覆盖。
+\end{pro}
+\begin{pro}
+紧致空间的闭子集紧致
+\end{pro}
+\begin{pro}
+紧致空间在连续映射下的象也紧致
+\end{pro}
+\begin{note}
+这说明紧致性是\textbf{拓扑性质}。拓扑性质是在同胚映射下不变的性质，同胚映射和连续性又有着极其紧密的关系，连续性可以将拓扑空间的结构迁移，所以前面构造新空间的拓扑时往往要求投射等等映射是连续的。
+\end{note}
+\begin{pro}
+若$A$是Hausdorff空间的紧致子集，$x \overline{\in} A$，则$x$与$A$有不相交邻域。
+\end{pro}
+\begin{coro}
+Hausdorff空间的紧致子集是闭集
+\end{coro}
+\begin{pro}
+若$f:X\rightarrow Y$是连续的一一对应，其中$X$紧致,$Y$是Hausdorff空间，则$f$是同胚。
+\end{pro}
+\begin{pro}
+紧致性有可乘性。
+\end{pro}
+\subsection{连通性}
+\begin{dfnt}
+拓扑空间$X$称为\textbf{连通性}，如果它不能分解为两个非空不相交开集的并
+\end{dfnt}
+\begin{note}
+连通与下面几个说法等价：\\$x$不能分解为两个非空不相交闭集的并；\\$X$没有既开又闭的非空真子集；\\$X$的既开又闭子集只有$X$与$\emptyset$;
+\end{note}
+\begin{pro}
+连通空间在连续映射下的像也是连通的
+\end{pro}
+\begin{pro}
+若$X_0$是$X$的既开又闭子集，$A$是$X$的连通子集，则或者$A \cap X_0 = \emptyset$，或者$A \subset X_0$
+\end{pro}
+\begin{pro}
+若$X$有一个连通稠密子集，则$X$连通
+\end{pro}
+\begin{pro}
+如果$X$有一个连通覆盖$\mathscr{U}$($\mathscr{U}$中每个成员都连通)，并且$X$有一个连通子集$A$，他与$\mathscr{U}$中每个成员都相交，则$X$连通。
+\end{pro}
+\begin{thr}
+连通性是可乘的。
+\end{thr}
+\begin{dfnt}
+拓扑空间的一个子集称为$X$的\textbf{连通分支},如果它是连通的，而且不是$X$的其他连通子集的真子集。
+\end{dfnt}
+\begin{note}
+定义意味着连通分支是极大的连通子集
+\end{note}
+\begin{pro}
+$X$的每个非空连通子集包含在唯一的一个连通分支中。
+\end{pro}
+\begin{pro}
+连通分支是闭集。
+\end{pro}
+\begin{note}
+由命题30以及连通分支的是极大连通子集可知连通分支是闭集。但是注意，连通分支不必是开集，比如记$X$是$E^1$中所有有理数构成的子空间，其连通分支为单点集。
+\end{note}
+\begin{dfnt}
+拓扑空间$X$称为\textbf{局部连通的}，如果$\forall x \in X$,$x$的所有连通邻域构成$x$的邻域基。
+\end{dfnt}
+\begin{pro}
+局部连通空间的连通分支是开集。
+\end{pro}
+\subsection{道路连通性}
+\begin{dfnt}
+$X$是一个拓扑空间，从单位闭区间$I=[0,1]$到$X$的一个连续映射$a:I\rightarrow X$称为$X$上的一条\textbf{道路}。
+\end{dfnt}
+\begin{dfnt}
+拓扑空间$X$是\textbf{道路连通的}，如果$\forall x,y\in X$,存在$X$中分别以$x$和$y$为起点和终点的道路。
+\end{dfnt}
+\begin{pro}
+道路连通空间一定连通
+\end{pro}
+\begin{pro}
+道路连通空间的连续映射的像也是道路连通的。\\道路连通性也是可乘的。
+\end{pro}
+\begin{note}
+道路连通性也有相当于命题31的结果，但是命题30对道路连通性不成立。
+\end{note}
+在拓扑空间中，规定关系~,若两点可用$X$上道路连接，则称他们相关，易验证他是一个等价关系。
+\begin{dfnt}
+在此等价关系下分成的等价类称为$X$的\textbf{道路连通分支}，简称道路分支。
+\end{dfnt}
+\begin{pro}
+拓扑空间的道路分支是它的极大道路连通子集。
+\end{pro}
+\begin{dfnt}
+拓扑空间$X$称为\textbf{局部道路连通}的，如果$\forall x\in X$,$x$的道路连通邻域构成$x$的邻域基.
+\end{dfnt}
+\begin{note}
+道路连通空间也不一定是局部道路连通的。
+\end{note}
+\begin{thr}
+局部道路连通空间$X$的道路分支就是连通分支，它们既开又闭；当$X$连通时，它一定道路连通。
+\end{thr}
+
+\section{商空间与闭曲面}
+\begin{note}
+第一节介绍了几个常见的曲面：平环，Mobius带，环面($T^2$),Klein瓶,射影平面($P^2$)。介绍了它们各自生成的方法：通过\textbf{粘合}把简单的曲面变成这些曲面。而随着粘合更加复杂，在直观上无法理解这些粘合，比如射影平面是由圆面的每一对对径点粘合而成，于是就需要用拓扑的方法描述粘合这个概念，这就是下面要说的商空间与商映射。
+\end{note}
+\subsection{商空间与商映射}
+\begin{dfnt}
+设$(X,\tau)$是拓扑空间,$\sim$是集合X上的一个等价关系，规定商集$X/\sim$上的子集族$$\widetilde{\tau} = \{V \subset X/\sim |p^{-1}(V)\in \tau\}$$则$\widetilde{\tau}$是$X/\sim$上的一个拓扑，称为\textbf{商拓扑},称$(X/\sim,\widetilde{\tau})$是\textbf{商空间}。
+\end{dfnt}
+\begin{note}
+$\widetilde{\tau}$是使得粘合映射连续的最大拓扑
+\end{note}
+\begin{thr}
+设$X,Y$是两个拓扑空间，$\sim$是一个等价关系，$g:X/\sim \rightarrow Y$是一个映射，则g连续$\Leftrightarrow g\circ p$连续。 
+\end{thr}
+\begin{dfnt}
+设$X,Y$是拓扑空间，映射$f:X\rightarrow Y$称为\textbf{商映射}，如果\\(1)$f$连续；\\(2)f是满的;\\(3)设$B\subset Y$,如果$f^{-1}(B)$是$X$的开集，则$B$是$Y$的开集。
+\end{dfnt}
+\begin{pro}
+如果$f:X\rightarrow Y$是商映射，则$X/f \cong Y$
+\end{pro}
+\begin{pro}
+连续的满映射$f:X\rightarrow Y$如果还是开映射或闭映射，则它是商映射。
+\end{pro}
+\begin{thr}
+如果$X$紧致，$Y$是Hausdorff空间，则$X$到$Y$的连续满映射一定是商映射
+\end{thr}
+\begin{pro}
+商映射的复合是商映射
+\end{pro}
+\subsection{拓扑流形与闭曲面}
+\begin{dfnt}
+一个Hausdorff空间X称为\textbf{n维流形}，如果X里任意一点都有一个同胚于$E^n$或$E^n_+$的开邻域。
+\end{dfnt}
+\begin{note}
+$$E^n_+ = \{(x_1,x_2,\cdots,x_n)\in E^n | x_n \geq 0\}$$从定义可以看出，流形满足$C_1$公理，还是局部道路连通和局部紧致的。
+\end{note}
+\begin{dfnt}
+二维流形称为\textbf{曲面},没有边界点的紧致连通曲面称为\textbf{闭曲面}
+\end{dfnt}
+\begin{dfnt}
+\textbf{亏格为n的可定向闭曲面}\textbf{亏格为n的不可定向闭曲面}
+\end{dfnt}
+\begin{note}
+安交叉帽的等效手术是将洞口对径点粘合。$2P^2$可看作两条Mobius带沿边界粘合，其实是Klein瓶。
+\end{note}
+\begin{thr}[闭曲面分类定理]
+$\{nT^2\}$和$\{mP^2\}$不重复地列出了闭曲面的所有拓扑类型。
+\end{thr}
+\section{同伦与基本群}
+\begin{dfnt}
+设$f,g \in C(X,Y)$.如果有连续映射$H:X\times I \rightarrow Y$，使得$\forall x \in X,H(x,0)=f(x),H(x,1)=g(x)$，则称$f$于$g$\textbf{同伦}，记作$f \simeq f:x\rightarrow Y$
+\end{dfnt}
+\begin{note}
+同伦是等价关系，把$C(X,Y)$在同伦关系下的等价类称为\textbf{映射类}，所有映射类的集合记作[X,Y]
+\end{note}
+\begin{pro}
+若$f_0 \simeq f_1:X \rightarrow Y,g_0 \simeq g_1:Y \rightarrow Z$则$g_0\circ f_0 \simeq g_1 \circ f_1$
+\end{pro}
+\begin{dfnt}
+如果$f$同伦于一个常值映射，则称$f$是\textbf{零伦}的
+\end{dfnt}
+\begin{dfnt}
+设$A \subset X,f,g\in C(X,Y)$.如果存在$f$到$g$的同伦$H$,使得当$a \in A$时，$H(a,t)=f(a)=g(a),\forall t \in I$，则称$f$和$g$相对于A同伦，记作$f \simeq g rel A$
+\end{dfnt}
+\begin{note}
+命题41可以传递过来
+\end{note}
+\begin{dfnt}
+设$a,b$是X上两条道路，如果$f \simeq g rel \{0,1\}$则称a与b\textbf{定端同伦}，记作$a\underset{\dot{}}{\simeq} b$
+\end{dfnt}
+\begin{note}
+在此关系下的等价类被称为\textbf{道路类}
+\end{note}
+
+\end{document}
