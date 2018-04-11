@@ -1,0 +1,115 @@
+\documentclass[UTF8]{ctexart}
+\title{图论讲义}
+\author{万宗祺}
+\date{\today}
+\usepackage{amsthm}
+\usepackage{geometry}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\geometry{left = 2cm,right=2cm,top=2.5cm,bottom=2.5cm}
+\newtheorem{dfnt}{定义}
+\newtheorem{thr}{定理}
+\newtheorem{lemma}{引理}
+\newtheorem*{coro}{推论}
+\newtheorem*{note}{注}
+\newtheorem{pro}{命题}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\section{图的匹配，覆盖和填装}
+这一节介绍了图论中的重要问题--匹配(matching)，覆盖(covering)和填装(packaging)
+
+\textbf{独立}边构成的集合M称为一个匹配，若U中的每个顶点都与M中一个边关联，就称M是U的一个匹配，或者说U中顶点被M匹配，而不与M中顶点相关联的就称为非匹配顶点
+
+给定图族$\mathscr{H}$，匹配问题的一个推广就是在已知图G中寻找尽可能多的顶点不相交的子图，使每个子图与$\mathscr{H}$中一个图同构，这就是填装问题。
+
+而覆盖问题是指在图G中找到一个尽可能小的顶点集，使得G中任意一个与$\mathscr{H}$中图同构的子图都与该顶点集相交。
+
+\subsection{二部图中的匹配}
+约定该节中G为二部图，A，B是它的两个部分
+\begin{dfnt}
+\textbf{交错路}(alternating path)是指G中一条从A中非匹配点出发，其边在E$\backslash$ M和M中交错出现的路，若交错路终止于一个非匹配顶点，则称其为一条\textbf{增广路}(augmenting path)。
+\end{dfnt}
+
+通过增广路和M的对称差可以构造一个更大的匹配，不断进行直到没有增广路后，达到的匹配就是最优的匹配（拥有最大边数）
+ 
+\begin{dfnt}[Konig]
+对于$U \subset V$，如果G中每一条边都与U中一个顶点关联，就称U是E的一个\textbf{顶点覆盖}
+\end{dfnt}
+\begin{thr}[Hall]
+二部图G中匹配的最大基数等于其边的顶点覆盖的最小基数。
+\end{thr}
+
+
+要寻找1-因子，直接的想法是找到一个饱和A匹配，如果还有$|A|=|B|$那么，自然这个匹配就是一个1-因子了
+
+下面的定理说明了饱和A匹配在什么情况下存在
+\begin{thr}[婚姻定理(marriage theorem)]
+二部图G包含饱和A的匹配，当且仅当对所有的$S \subseteq A$，均有$|N(S)| \geq |S|$
+\end{thr}
+\begin{coro}
+若G是k-正则的，则G包含1-因子（1-正则的支撑子图）
+\end{coro}
+\begin{coro}
+2k-正则图都有2-因子
+\end{coro}
+\begin{note}
+用了将每个点拆分为两个点从而构造二部图的技巧
+\end{note}
+\begin{dfnt}
+由$E(V)$上的线性序$\leq_v$所形成的序族$(\leq_v)_{v \in V}$被称为G的一个\textbf{优先集}，如果对每条边$e \in E \backslash M$，都存在一条边$f \in M$使得e和f有一个公共顶点v，且$e <_v v$,则称匹配M在G中是\textbf{稳定的}
+\end{dfnt}
+\begin{thr}[稳定婚姻定理(stable marriage theorem)]
+对任意给定优先集，二部图G都有一个稳定匹配。
+\end{thr}
+\subsection{一般图中的匹配}
+\begin{dfnt}
+给定图G,我们用$C_G$表示它的分支的集合，用$q(G)$表示$C_G$中奇分支(阶为奇数)的个数
+\end{dfnt}
+\begin{thr}
+图G有1-因子当且仅当对所有$S \subseteq V(G)$，有$q(G-S) \leq |S|$
+\end{thr}
+\begin{coro}
+每个无桥的立方图都有1-因子
+\end{coro}
+\begin{dfnt}
+非空图G=(V,E)称为\textbf{因子临界}的，如果G不包含1-因子，但对每个顶点v，G-v都包含1-因子。
+
+令$G_S$是由G通过把分支$C \in C_{G-S}$收缩成单个顶点，并删除S内部的点而得到的二部图
+
+如果$G_S$包含饱和S的一个匹配，就称S与$C_{G-S}$是\textbf{可匹配的}
+\end{dfnt}
+\begin{thr}[Gallai-Edmonds 匹配定理]
+每个图G=(V,E)都包含一个顶点集S满足下面两条性质：\\(i)S与$C_{G-S}$是可匹配的;\\(ii)G-S的每个分支都是因子临界的。\\给定任意一个这样的S，G包含1-因子当且仅当$|S|=|C_{G-S}|$.
+\end{thr}
+\subsection{填装和覆盖}
+\begin{dfnt}
+在图族$\mathscr{H}$(可能相同的)到G的填装问题中，最多可能填装的图个数为k，将k和G中可以覆盖$\mathscr{H}$的所有子图的顶点最小数s进行比较，如果s有一个独立于G的，关于k的函数作为上界，则称$\mathscr{H}$具有Erdos-Posa性质。
+\end{dfnt}
+\begin{lemma}
+$k \in \mathbb{N}$，且H是一个立方多重图。若$|H| \geq s_k$,则H包含k个不相交的圈。其中$$s_k=\left \{
+\begin{aligned}
+4kr_k &\quad& k \geq 2 \\
+1 &\quad&k \leq 1
+\end{aligned}
+\right.
+\quad \quad \quad r_k = \log k+\log \log k +4
+$$
+\end{lemma}
+\begin{thr}[Erdos-Posa]
+存在一个函数$f:\mathbb{N}\rightarrow \mathbb{N}$,使得对任意$k \in \mathbb{N}$，每个图或者包含k个不相交的圈，或者存在一个至多有f(k)个顶点得到集合与所有圈相交。
+\end{thr}
+\subsection{树填装}
+这一节的问题是，在一个给定的图中，能找到多少条边不交的支撑树？如果不要求这些树不交，那么至少需要多少棵树才可以覆盖这个图呢？
+
+这个问题直接应用于这样一个应用问题，在一个通信网络中，对于任意两个点，期望找到k条不同的路，倘若我们已经找出了这个图的k颗边不交的支撑树，那么显然这k个路可以直接被给出了。
+\begin{thr}
+一个多重图包含k颗边不交的支撑树，当且仅当对于任意顶点集的划分P，它有至少$|P|-1$条\textbf{交叉边}(端点位于不同部分的边)
+\end{thr}
+如果要有k颗不相交的支撑树，当然是需要有足够的连通性的，首先至少需要保证k-连通，但是这不是充分条件，下面的推论给出了连通程度与能否构造k颗不交支撑树的关系
+\begin{coro}
+2k-连通多重图有k颗边不交的支撑树。
+\end{coro}
+\end{document}

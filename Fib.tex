@@ -1,17 +1,87 @@
 \documentclass[UTF8]{ctexart}
-\title{斐波那契数列}
-\author{万宗祺}
+\title{斐波那契数列实验报告}
+\author{万宗祺 201600090059}
 \date{\today}
 \usepackage{amsthm}
 \usepackage{geometry}
 \usepackage{amsfonts}
 \usepackage{mathrsfs}
 \usepackage{amsmath}
+\usepackage{listings}
+\newtheorem*{note}{注}
 \geometry{left = 3.5cm,right=3.5cm,top=2.5cm,bottom=2.5cm}
 \newcommand{\nb}{^\circ}
 \begin{document}
 \maketitle
 \tableofcontents
-\section{实验目的}
+\section{问题描述}
+Fibonacci数列可由式$a_k = a_{k-1}+a_{k-2},k=3,4,\cdots$生成，其中初值$a_1=a_2=1$,要编写函数计算该数列的第n项，要求：
 
+1.函数执行时首先测试输入参数，确保函数能正确调用；
+
+2.分别使用递归和循环的方式实现，如$y=fibr(n)$递归方式，$y=fibl(n)$循环方式；
+
+3.针对不同的n值，分别调用两种函数进行计算，并使用tic和toc函数计时，比较两种方式的计算时间，并分析原因。
+
+\section{实验过程}
+下面给出fibr.m与fibl.m的代码，内含详细的注释
+\begin{note}
+由于listing宏包不支持中文注释，注释只能写英文了
+\end{note}
+\lstset{language=Matlab}
+\begin{lstlisting}
+% fibr.m
+function fib = fibr(n)
+% Calculate item n recursively 
+if n==1 || n==2 
+% Boundary conditions at the end of recursion 
+    fib = 1;
+else
+    fib = fibr(n-1)+fibr(n-2); 
+% If do not get to the boundary, continue to call the function
+end
+\end{lstlisting}
+
+\begin{lstlisting}
+% fibl.m
+function fib = fibl(n)
+% Calculate item n circularly
+fibb = [1,1];% set initial value
+for i=3:n 
+    fibb = [fibb fibb(i-1)+fibb(i-2)]; % calculate a new item
+end
+fib = fibb(n);
+\end{lstlisting}
+
+接下来，针对不同的n，分别调用两种函数进行计算并计时，脚本代码如下:
+
+\begin{lstlisting}
+%test.m
+for n=21:25
+    tic
+    fibr(n);
+    toc
+    tic
+    fibl(n);
+    toc
+end
+\end{lstlisting}
+\section{结果分析}
+测试了计算n从21到25，两个函数分别需要的时间，结果以表格展示如下
+\\
+\\
+\centerline{
+\begin{tabular}{cccccc}
+\hline
+n & 21 & 22 &23 & 24 &25 \\
+\hline
+递归方式用时(s) & 0.107574 & 0.160348 & 0.240618 & 0.389781 &0.633730 \\
+\hline
+循环方式用时(s) & 0.000206&0.000067&0.000046&0.000071&0.000073 \\
+\hline
+\end{tabular}
+}\\
+\\
+由此可以看出，循环方式所需要的时间远远少于递归方式，分析其原因，应该是递归方式进行了大量的重复计算，而循环方式顺推到n，对序列中每一个项只计算了一遍，而递归方式却是随着n增大,计算次数以指数方式增长。
+\\
 \end{document}
