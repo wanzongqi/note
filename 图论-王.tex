@@ -1,0 +1,226 @@
+\documentclass[UTF8]{ctexart}
+\title{图论--王树禾}
+\author{万宗祺}
+\date{\today}
+\usepackage{amsthm}
+\usepackage{geometry}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\geometry{left = 2cm,right=2cm,top=2.5cm,bottom=2.5cm}
+\newtheorem{dfnt}{定义}
+\newtheorem{thr}{定理}
+\newtheorem{lemma}{引理}
+\newtheorem*{coro}{推论}
+\newtheorem*{note}{注}
+\newtheorem{pro}{命题}
+\newtheorem{alg}{算法}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\section{图}
+\subsection{图的基本概念}
+\begin{dfnt}
+数学结构$G=\{V(G),E(G),\Phi_G\}$为一个图，V是顶点集，E是边集，$\Phi_G$是E到$V \times V$的关联函数。
+\end{dfnt}
+\begin{dfnt}[图的一些基本定义]
+\quad\\(1)边的端点\\(2)边与顶点相关联:边与他的两个端点是关联的\\(3)邻顶:同一个边的两个端点相邻\\(4)邻边:与同一个顶相关联的两条边叫做邻边\\(5)环:只与一个顶相关联的边叫做环\\(6)重边:端点一样的边是重边\\(7)完全图:任意两个顶点都相邻的图，记作$K_v$\\(8)单图:无环无重边的图\\(9)二分图:$V(G) = X \cup Y,X \cap Y = \emptyset$，且X中任意两个顶点不相邻，Y中任意两个顶点不相邻，则称G为二分图。若X中每个顶点与Y中每个顶点相邻，就称为完全二分图。记作$K_{m,n},m =|X|,n=|Y|$\\(10)星:$K_{1,n}$叫做星\\(11)完全r分图:同(9)类似\\(12)顶点的度数(次数):与该点相邻的边数，环计算两次，记作$d(v)$
+\end{dfnt}
+\begin{thr}[Euler]
+$\sum \limits_{v \in V(G)} d(v) = 2\epsilon$
+\end{thr}
+\begin{coro}
+图中奇次顶的总数是偶数
+\end{coro}
+\begin{dfnt}
+同构，定义略
+\end{dfnt}
+\begin{dfnt}[边图]
+设G是一个图，L(G)是另一个图，满足$V(L(G))=E(G),L(G)$中两顶相邻当且仅当他们是G中两条相邻的边，则称L(G)是G的边图。
+\end{dfnt}
+\begin{pro}
+$G \cong L(G)$当且仅当G是多边形。
+\end{pro}
+\subsection{轨道和圈}
+\begin{dfnt}
+道路定义略，轨道就是各顶点不一样的道路，记作$P(v_0,v_k),v_0,v_k$是起点和终点，起点终点重合的道路叫做回路，起点终点重合的轨道叫做圈，长为k的圈叫做k阶圈，$u,v$两顶的距离指以u,v为起点的最短轨道长度，记作d(u,v)。若存在道路以$u,v$为起止点，则称u,v在G中连通，若G中任意两点都连通，则称G为连通图。
+\end{dfnt}
+\begin{dfnt}
+子图概念略，若子图S顶点和图G顶点一样，就称子图为生成子图。若V(S)=V',E(S)是由两端都在V'中的边构成，就称S是由V'导出的G的导出子图。连通片定义略。
+\end{dfnt}
+\begin{pro}
+|V|=2k,$d(v) \geq k$,则图连通
+\end{pro}
+\begin{pro}
+在仅两个奇次顶的图中，这两个顶连通
+\end{pro}
+\begin{thr}
+图G是二分图当且仅当G中无奇阶圈
+\end{thr}
+\begin{pro}
+无零次与1次顶的单图中有圈
+\end{pro}
+\begin{note}
+使用了“最长轨”技巧
+\end{note}
+\begin{dfnt}
+单图G中最长的圈称为该图的周长；最短的圈之长称为该图的围长；两顶点间距离最大值称为直径，记作$d(G)$，图G的中心是指使$\max \limits_{v \in V(G)} d(u,v)$最小的顶u;这个最小值就是图的半径r(G)
+\end{dfnt}
+\begin{dfnt}
+单图G的补图记作$G^C$，$V(G^C)=V(G)$,当且仅当在G中两顶不相邻，该二顶在$G^C$中相邻。
+\end{dfnt}
+\begin{pro}
+单图G和他的补图不能都不连通
+\end{pro}
+\subsection{求最短轨长度的算法}
+\begin{alg}[Dijkstra]
+\quad \\(1)初始化边长度矩阵$\omega$，若两顶点不相邻，$\omega (uv) =\infty$\\(2)维护一个数组l，初始化l(v)=$\infty$,l($u_0$)=0;令$S_0$={$u_0$},i=0;\\(3)对每个不属于$S_i$的顶点v，赋值$l(v):=min\{l(v),l(u_i)+\omega (u_iv)\}$;设$u_{i+1}$是使$l(v)$取最小值的$V(G)-S_i$中的顶，令$S_{i+1} = S_i \cup \{u_{i+1}\}.$\\(4)i=v-1,就停止，否则用i+1代替i，转(3)
+\end{alg}
+\section{树}
+\subsection{树的定义和性质}
+\begin{dfnt}
+无圈连通图称为树。每个连通片都为树的不连通图称为森林；树上次数为1的顶称为叶；如果一个树T是图G的生成子图，则称T是G的生成树，G-E(T)称为树余。
+\end{dfnt}
+\begin{thr}[树的等价命题]
+若G是一个单图，则下面诸命题等价：\\(1)G是树\\(2)G中任二顶点间恰有一条轨\\(3)G中无圈，|E|=|V|-1\\(4)G是连通图,|E|=|V|-1\\(5)G是连通图，G-e不连通，e是G的任意一条边\\(6)G无圈，G+e恰含一个圈，其中e是任意一个不在E(G)中的以V(G)中的顶为端点的边
+\end{thr}
+\begin{coro}
+G是连通图的充分必要条件是G有生成树
+\end{coro}
+\begin{pro}
+$|V| \geq 2$的树T至少有两个叶。 
+\end{pro}
+\begin{pro}
+连通图G的无圈子图是G的某个生成树的子图
+\end{pro}
+\subsection{生成树的个数}
+\begin{dfnt}
+用$\tau (G)表示G的生成树个数$
+\end{dfnt}
+\begin{thr}
+$\tau (K_n)=n^{n-2}$ 
+\end{thr}
+\begin{thr}
+e是连通图G中的一条边，则$$\tau (G) = \tau (G-e) + \tau (G \cdot e),$$其中$G \cdot e$是把边e的长度收缩成零，e的两个端点重合成一个顶形成的图。
+\end{thr}
+\begin{note}
+用这个公式可以每次减少G的一条边，简化图来计算生成树个数
+\end{note}
+\subsection{求生成树的算法}
+广度优先算法与深度优先算法，此处不再赘述
+\subsection{求最优生成树算法}
+\begin{alg}[Kruskal]
+\quad \\(1)从E(G)中选一条权最小的边$e_1$\\(2)若$e_1,e_2,\cdots,e_i$已选出，则从E(G)-{$e_1,e_2,\cdots,e_i$}中选$e_{i+1}$,使得(i)G[{$e_1,e_2,\cdots,e_i$}]中无圈，(ii)$e_{i+1}$权值最小.\\(3)反复执行上述步骤直到选出$e_{v-1}$
+\end{alg}
+\subsection{有序二元树}
+\begin{dfnt}
+$d^+(v)$表示出度，$d^-(v)$表示入度。若T是树，把T的每一边标志一个方向，使得除顶$v_0 \in V(T)$外，每个$v \in V(T)-\{v_0\}$皆存在由$v_0$到v的有向轨，则称T是以$v_0$为根的外向树。
+\end{dfnt}
+\begin{dfnt}[Huffman树]
+以$v_0$为根，$v_1,v_2,\cdots,v_n$为叶的有序二元树T中，$v_i$代表的事物出现的概率为$p_i$，满足$\sum \limits_{i=1}^{n} p_i = 1$,称轨$P(v_0,v_i)$的长为$v_i$的码长，且使得$$m(T)=\sum \limits_{i=1}^n p_i l_i = min$$则称T为带权$p_1,p_2,\cdots,p_n$的Huffman树，又称最优二元树。
+\end{dfnt}
+\begin{thr}
+若T是Hoffman树，$p_1 \leq p_2 \leq \cdots \leq p_n,v_1,v_2,\cdots,v_n$为叶，(1)若$v_i$与$v_j$是兄弟，则$l_i=l_j$;(2)$v_1$与$v_2$是兄弟;(3)设$T^+$是带权$p_1+p_2,p_3,\cdots,p_n$的Hoffman树，与$p_1+p_2$相应的叶子生出两个新叶分别带权$p_1$和$p_2$，则得到带权$p_1,p_2,\cdots,p_n$的Hoffman树。
+\end{thr}
+\begin{note}
+以上定理其实给出了生成Hoffman树的算法
+\end{note}
+\subsection{n顶有序编码二元树的数目}
+\begin{note}
+括号列技巧
+\end{note}
+\begin{thr}
+n顶有序林与n顶有序编码二元树的数目皆为c(n).其中c(n)为Catalen数，$c(n)= \frac{1}{n+1}C_{2n}^{n}$
+\end{thr}
+\section{平面图}
+\subsection{平面图及其平面嵌入}
+\begin{dfnt}
+把一个图G的图示画在曲面上，使得任二边不在内点相交，则称G可以嵌入这个曲面。若G可以嵌入平面，则称其为平面图。
+\end{dfnt}
+\begin{thr}
+图G可平面嵌入的充分必要条件是G可以球面嵌入
+\end{thr}
+\begin{note}
+球极平面投影，使球面顶点不在图的边或点上即可。
+\end{note}
+\subsection{Euler公式}
+\begin{thr}[Euler公式]
+G是连通平面图，则有公式$$v-\epsilon+\phi = 2$$其中v=V(G)是G的顶数，$\epsilon =\epsilon (G)$是G的边数，$\phi = \phi (G)$是G的面数
+\end{thr}
+\begin{dfnt}[面的度数]
+记$F(G)=\{f_1,f_2,\cdots,f_{\phi}\}$是平面图G的面集合，$f_i$边界上的边条数记为$d(f_i)$,称为面的度数，是沿面边界行一周时，历经的边的条数，其中桥需要算两次
+\end{dfnt}
+\begin{pro}
+$$\sum_{i=1}^{\phi}d(f_i)=2\epsilon$$
+\end{pro}
+\begin{note}
+对面数量递推.Euler公式表明了，同样的图以不同方式嵌入不会改变面的数量。
+\end{note}
+\begin{coro}
+若G是$v \geq 3$的连通平面图，则$\epsilon \leq 3v-6$.
+\end{coro}
+\begin{coro}
+平面图G的最小顶次数$\delta \leq 5$
+\end{coro}
+\begin{note}
+上面两个推论具体地告诉我们，图的边数如果过多就无法嵌入到平面中。
+\end{note}
+\subsection{极大平面图}
+\begin{dfnt}[极大平面图]
+若G是$v \geq 3$的平面图，当$u,v \in V(G),nv \notin E(G)$时，G+uv不再是平面图，则称G是极大平面图。
+\end{dfnt}
+\begin{thr}
+$v \geq 3$的平面图G是极大平面图的充分必要条件是G的平面嵌入的每个面是三角形
+\end{thr}
+\begin{coro}
+$v \geq 3$的平面图是极大平面图的充分必要条件是$\epsilon = 3v-6$
+\end{coro}
+\begin{thr}
+G是$v \geq 4$的极大平面图，则$\delta (G) \geq 3$
+\end{thr}
+\subsection{平面图的充要条件}
+\begin{thr}[Kuratowsky]
+G是平面图当且仅当G中不含与$K_5$和$K_{3,3}$同胚的子图
+\end{thr}
+\begin{dfnt}
+如果一个图不是平面图，那么我们可以把它的边分成n个部分，使每个部分的导出子图都可以镶嵌到一个平面中，最小的n就叫做这个图的厚度。
+\end{dfnt}
+\begin{thr}
+若$\theta (G)$代表图G的厚度，则有以下估计\\(i)$\theta(G) \geq \{\frac{\epsilon}{3v-6}\},v>2$,{x}是x向上取整\\(ii)连通图G无三阶圈，则$\theta (G) \geq \{\frac{\epsilon}{2v-4}\},v>2$ \\(iii)$\theta (K_{v}) \geq [\frac{v+7}{6}],v\geq 3$
+\end{thr}
+\subsection{平面嵌入的灌木生长算法}
+待补全。。。。
+\section{匹配理论}
+\subsection{匹配与许配}
+\begin{dfnt}
+\textbf{独立}边构成的集合M称为一个匹配，若U中的每个顶点都与M中一个边关联，就称M是U的一个匹配，或者说U中顶点被M匹配，而不与M中顶点相关联的就称为非匹配顶点，M中每边的两个端点称为在M中相配，M中每边的端点称为被M许配，若G中每个顶点都被M许配，称M为一个完备匹配，G中边数最多的匹配称作最大匹配。
+\end{dfnt}
+\begin{dfnt}[可增广轨]
+设M是G中一个匹配，G中一条轨道P(u,v)上，u,v未被许配，但P(u,v)上的边交错出现在M中，就称P是一条可增广轨。由可增广轨可以把原匹配改进成一个多一条边的更大匹配(取对称差)
+\end{dfnt}
+\subsection{匹配定理}
+\begin{thr}[Berge]
+M是图G中的一个最大匹配当且仅当G中无M的可增广轨
+\end{thr}
+\begin{thr}[Hall]
+设G是二分图，X,Y是它的两个部分。则存在把X中顶都许配的匹配的重要条件是$\forall S \subseteq X,|N(S)|\geq |S|$，其中$N(S)$是S中每个顶的邻顶组成的集合，称为邻集
+\end{thr}
+\begin{coro}
+k次正则2分图有完备匹配
+\end{coro}
+\begin{dfnt}
+设$B \subset V(G)$，G的每条边皆与B中顶关联，则称B是G的一个覆盖集;字面意思定义出极小覆盖，最小覆盖。最小覆盖的顶数目称为G的覆盖数，记为$\beta (G)$
+\end{dfnt}
+\begin{thr}[Konig]
+若G是二分图，则其最大匹配的边数为$\beta (G)$
+\end{thr}
+\begin{thr}[Tutte]
+图G有完备匹配当且仅当$\forall S \subset V(G),o(G-S) \leq |S|$，其中$o(G-S)$是G-S中奇数个顶点的连通片个数。
+\end{thr}
+\begin{thr}
+无桥三次正则图有完备匹配
+\end{thr}
+\subsection{匹配算法}
+
+\end{document}
