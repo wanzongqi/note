@@ -1,4 +1,4 @@
-\documentclass[UTF8]{ctexart}
+\documentclass[UTF8]{article}
 \title{斐波那契数列实验报告}
 \author{万宗祺 201600090059}
 \date{\today}
@@ -8,6 +8,7 @@
 \usepackage{mathrsfs}
 \usepackage{amsmath}
 \usepackage{listings}
+\usepackage{xeCJK}
 \newtheorem*{note}{注}
 \geometry{left = 3.5cm,right=3.5cm,top=2.5cm,bottom=2.5cm}
 \newcommand{\nb}{^\circ}
@@ -32,7 +33,7 @@ Fibonacci数列可由式$a_k = a_{k-1}+a_{k-2},k=3,4,\cdots$生成，其中初�
 \begin{lstlisting}
 % fibr.m
 function fib = fibr(n)
-% Calculate item n recursively 
+%递归计算
 if n==1 || n==2 
 % Boundary conditions at the end of recursion 
     fib = 1;

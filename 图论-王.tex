@@ -222,5 +222,338 @@ k次正则2分图有完备匹配
 无桥三次正则图有完备匹配
 \end{thr}
 \subsection{匹配算法}
+\begin{alg}[匈牙利算法]
+\item (1)设G是连通二分图，在G中任取初始匹配M
+\item (2)若M把X中顶全部匹配，止，M就是最大匹配；否则取X中未被匹配的顶u，令S=\{u\},T=$\emptyset$
+\item (3)若N(S)=T，中止，否则取$y \in N(S)-T$
+\item (4)若y被M许配，设$yz \in M$,$S \leftarrow S\cup\{z\},T \leftarrow T \cup \{y\}$,转(3);否则P(u,y)是增广轨，与原匹配取对称差可得到更大的匹配，然后转(2)
+\end{alg}
+\begin{note}
+具体实现算法的时候需要记录增广轨的轨迹。Berge定理保证了算法的正确性。
+\end{note}
+接下来的问题是最佳匹配问题，问题模型为，对完全二分图$G = K_{n,n}$的每个边e，加权$\omega (e) \geq 0$，求总权最大的匹配。
+\begin{dfnt}
+对$K_{n,n}$每顶给一个顶标$l(v)$,当$x \in X,t \in Y,l(x)+l(y) \geq \omega(xy)$时，称此种顶标为正常顶标。正常顶标是存在的$$l(x)=\max \limits_{y \in Y} \omega(xy) ,x \in X$$
+$$l(y) = 0, y\in Y$$就是一个正常顶标。
+\end{dfnt}
+\begin{thr}
+设$G=K_{n,n}$是具有正常顶标l的加权图，取G的边子集$$E_l = \{xy | xy \in E(G),l(x)+l(y)=\omega (xy)\}$$令$G_l$是以$E_l$为边集的生成子图，如果$G_l$有完备匹配M，则M是G的最佳匹配
+\end{thr}
+而如果没有完备匹配，KM算法给出了一种不断修改顶标使得最终可以达到完备匹配的方法
+\begin{alg}[KM算法]
+\item (1)设G是连通二分图，在G中任取初始匹配M和初始顶标
+\item (2)若M把X中顶全部匹配，止，M就是最大匹配；否则取X中未被匹配的顶u，令S=\{u\},T=$\emptyset$
+\item (3)若N(S)=T，且X未被全部匹配，取$$a_l = \min \limits_{x \in S ,y\notin T}\{l(x)+l(y)-\omega(xy)\}$$ 
+\[\bar{l} =\left \{ \begin{array}{ll} l(v)-a_l & v \in S \\l(v)+a_l &v \in T \\l(v) &其它 \end{array}\right.\]
+$l \leftarrow \bar{l},G_l \leftarrow G_{\bar{l}}$
+否则取$y \in N(S)-T$
+\item (4)若y被M许配，设$yz \in M$,$S \leftarrow S\cup\{z\},T \leftarrow T \cup \{y\}$,转(3);否则P(u,y)是增广轨，与原匹配取对称差可得到更大的匹配，然后转(2)
+\end{alg}
+\begin{note}
+相比起匈牙利算法，多了一步修改顶标操作
+\end{note}
+\subsection{图的因子分解}
+\begin{dfnt}
+将给定的图G分解成若干两两无公共边的生成子图$G_1,G_2\cdots G_n$，且要求$G_i$具有某种性质，即$V(G_i)=V(G),\bigcup \limits_{i=1}^{n}E(G_i)=E(G),E(G_i) \cap E(G_j) = \emptyset$，并且要求$G_i$有性质$p_i$。称$G_i$是G的因子，这个过程叫因子分解。一个因子是m次正则图时，称此因子是G的m因子；如G的因子全部是m因子，则称G可以m因子分解。
+\end{dfnt}
+\begin{thr}
+$K_{2n}$可以1因子分解
+\end{thr}
+\begin{thr}
+$K_{2n+1}$存在每个因子皆生成圈的2因子分解，共计n个生成圈
+\end{thr}
+
+\section{着色理论}
+\subsection{边着色}
+略
+\subsection{顶着色}
+\begin{dfnt}
+如果使用n种颜色把图G的每顶分配一种颜色，使得邻顶异色，则称此为对G的顶的正常着色。图G的顶的正常着色种所需颜色数最小值为G的顶色数，简称色数，记为$\xi$，色数为k的图称为k色图
+\end{dfnt}
+\begin{pro}
+\item (1)G是有边二分图的充要条件是$\xi (G)=2$
+\item (2)G是无边图当且仅当$\xi (G)=1$
+\item (3)G是完全图当且仅当$\xi (G)=|V(G)|$
+\item (4)$\xi (G) \leq \Delta (G)+1$
+\end{pro}
+\begin{thr}
+平面图色数不大于4
+\end{thr}
+\subsection{颜色多项式}
+\begin{dfnt}
+用$P(G,k)$表示对图G用k种颜色顶正常着色的方式数，若G给定，则其是关于k的一元函数。但G不同，这个函数$P(G,k)$未必相同。
+\end{dfnt}
+\begin{pro}
+\item (1)$\xi (G)\leq k$的充要条件是P(G,k)>0
+\item (2)$P(G,k)=k(k-1)\cdots (k-v+1)$的充要条件是$G = K_v$
+\item (3)$P(G,k)=k^v$的充要条件是$|E(G)|=0$
+\item (4)若$G_1,G_2,\cdots,G_{\omega}$是G的连通片，则$P(G,k)=\prod \limits_{i=1}^{\omega}P(G_i,k)$
+\item (5)$P(G-e,k)=P(G,k)+P(G\cdot e,k)$
+\end{pro}
+\begin{thr}
+$P(G,k)$是k的v次多项式，$v=|V(G)|$，且按降幂排列，首项为$k^v$，第二项为$-\epsilon k^{v-1}$，无常数项，系数为正负交错的整数。
+\end{thr}
+\begin{thr}
+图G的颜色多项式为$k(k-1)^{v-1}$当且仅当G是v个顶的树
+\end{thr}
+\subsection{独立集}
+\begin{dfnt}
+设$I \subseteq V(G),\forall u,v \in I,$u与v不相邻，就说I是一个独立集。按通常定义方式定义出极大独立集和最大独立集。
+\end{dfnt}
+\begin{dfnt}
+若把图G的顶集V(G)划分成$V_1,V_2,\cdots,V_k$这k个子集，即$V(G)=\bigcup \limits_{i=1}^k V_i,V_i \cap V_j=\emptyset,i \neq j,V_i$是$G-\bigcup \limits_{j=1}^{i-1}V_j$的极大独立集，其中$V_0 = \emptyset$,把$V_i$种的顶染上i色，则称这种上色是对G的一种k顶规范着色。
+\end{dfnt}
+\begin{note}
+规范着色一定是正常着色，实际上，规范着色是在正常着色种按顺序尽量多着色一些无色边。
+\end{note}
+\begin{thr}
+如果G可以k顶正常着色，则G存在k顶规范着色。
+\end{thr}
+\begin{pro}[独立集与覆盖集]
+\item (1)I为G的独立集的充要条件是V(G)-I是G的覆盖集
+\item (2)I为G的极大独立集，则$V(G)-I$是G的极小覆盖集
+\item (3)$\alpha (G)+\beta (G) = |V(G)|$
+\end{pro}
+\begin{alg}[求极小覆盖集]
+规定:
+\item a或b，写成a+b
+\item a与b，写成ab
+$\forall v \in V(G)$，为了覆盖一切与v关联的边，或是v参加覆盖集，或是v的一切邻顶参加覆盖集，可以写成$$v+\prod \limits_{u \in N(v)}u$$所以极小覆盖集由下面多项式给出$$\prod_{v \in V(G)}(v+\prod \limits_{u \in N(v)}u)$$此式每一项是一个极小覆盖集
+\end{alg}
+\begin{dfnt}
+$V_1 \subseteq V(G),\forall v \in V(G)$,则$v \in V_1$，不然v与$V_1$内一顶相邻，则称$V_1$为G的最小支配集。同字面意思定义极小与最小支配集。
+\end{dfnt}
+\begin{note}
+任何图的极大独立集必为极小支配集
+
+按逻辑运算展开下式，每一项给出一个极小支配集$$\prod_{v \in V(G)}(v+\sum \limits_{u \in N(v)}u)$$事实上，在G中，为了v接收支配，或者v参与支配集，或者v的某个邻顶参与。
+\end{note}
+
+\subsection{Ramsey数}
+\section{Euler图与Hamilton图}
+\subsection{Euler图}
+\begin{dfnt}
+在图G中含一切边的行迹叫做Euler行迹，含一切边的闭行迹叫做Euler回路，若G中存在Euler回路，则称G为Euler图。
+\end{dfnt}
+\begin{thr}
+对于连通图G,(1)G是Euler图的充分必要条件是$\forall v\in V(G),d(v)$是偶数，(2)G是Euler图的充要条件是G可表为无公共边的圈之并。
+\end{thr}
+\begin{thr}
+连通图G是Euler行迹当且仅当G中至多两个奇次项。
+\end{thr}
+\subsection{中国邮递员问题}
+\begin{dfnt}[问题模型]
+任给一个图G，对E(G)加权，即对每个$e \in E(G)$,任意指定一个非负实数$\omega(e)=min$
+\end{dfnt}
+\begin{alg}[求Euler回路的FE算法]
+\item (1)任取$v_0 \in V(G),令W_0=v_0$
+\item (2)设行迹$W_i=v_0v_1\cdots v_i$已选定，则从E(G)-E(W)中选一条边$e_{i+1}$使得$e_{i+1}$与$v_i$关联，且非必要时，$e_{i+1}$不要选$G-E(W)$的桥.
+\item (3)反复执行(2)
+\end{alg}
+\begin{alg}[中国邮递员算法]
+\item (1)求G中奇次顶集合$V_0$
+\item (2)对$V_0$中每个顶对，用dijsktra算法求距离d(u,v)
+\item (3)构作加权完全图$K_{|V_0|}$，$V(K_{|V_0|})=V_0,K_{|V_0|}$中u,v权为d(u,v).
+\item (4)求加权图$K_{|V_0|}$的总权最小的完备匹配
+\item (5)在G中求M中同一边之端点间的最短轨
+\item (6)把G中在5求得的每条最短轨之边变成同权倍边，得到Euler图G'(这个图没有奇顶点)
+\item (7)用FE算法求G‘一条Euler回路，即G的中国邮路
+\end{alg}
+\subsection{Hamilton}
+\begin{dfnt}
+称含图的一切顶的圈为Hamilton圈，有Hamilton圈的图为Hamilton图；把含图的一切顶的轨称为Hamilton轨。
+\end{dfnt}
+\begin{thr}
+G是Hamilton图的必要条件是任取$S \subset V(G),S\neq \empty$，则$\omega(G-S) \leq |S|$，其中$\omega (\cdot)$是连通片个数.
+\end{thr}
+\begin{thr}
+设$|V(G)| \geq 3$，G的任一对顶u,v皆有$d(u)+d(v) \geq |V(G)|-1$,则G中有Hamilton轨；若$d(u) +d(v) \geq |V(G)|$，则G是Hamilton图
+\end{thr}
+\section{有向图}
+\subsection{弱连通，单连通与强连通}
+\begin{dfnt}
+若G是有向图，如果对$u,v \in V(G)$，存在从u到v的有向轨，则称u可达v；$\forall u,v \in V(G)$,u可达v或v可达u时，则称G是单连通有向图；$\forall u,v \in G$，不但u可达v，而且v可达u，则称G是强连通有向图；若把G的每边箭头取消，得到的无向图称为G的底图，底图连通的有向图叫做弱连通有向图。
+\end{dfnt}
+\begin{thr}
+G是强连通有向图当且仅当G中存在有向生成回路(包含所有点的有向回路)
+\end{thr}
+\begin{thr}
+当且仅当无向图是无桥连通图时，G可以定向成强连通有向图
+\end{thr}
+\begin{thr}
+G为单连通有向图当且仅当G中有含G所有点的有向道路
+\end{thr}
+\begin{pro}
+G是弱连通有向图时，G为有向Euler图的充要条件是对每个顶$v \in V(G)$，皆成立$d^-{v}=d^+{v}$，其中$d^-{v},d^+{v}$是v的入度和出度
+\end{pro}
+\begin{pro}
+G是弱连通有向图，G为有向Euler图的充要条件是$G = \bigcup \limits_{i=1}^n C_i$,$C_i$是G中有向圈，且$E(C_i)\cap E(C_j)=\emptyset , 1\leq i,j \leq n$,n是某个自然数
+\end{pro}
+\begin{pro}
+若G是弱连通有向图，且
+\[d^-(v)=\left \{ \begin{array}{ll} d^+(v) & v\in V(G) - \{u_1,u_2\},u_1,u_2 \in V(G);\\d^+(v) -1 &v = u_1;\\d^-(v) +1 &v = u_2 \end{array}\right.\]
+则G中存在从$u_1$到$u_2$的有向Euler行迹
+\end{pro}
+\subsection{循环赛图，有向轨和王}
+所谓循环赛图，又称竞赛图或赛图，是一个无向完全图$K_n$，把其每个边加一个方向而得到的有向图。它的实际背景是n位运动员，每位选手都要和其它选手比赛一场，当甲选手胜乙选手时，加一条甲到乙的边。
+\begin{thr}
+若有向图底图为G，则此有向图有长$\xi (G)-1$的有向轨
+\end{thr}
+\begin{note}
+由于$\xi (K_v) =v$，故每个赛图都有Hamilton轨
+\end{note}
+\begin{dfnt}
+在赛图中，若从一个顶出发，通过至多长2的顶可达任何一个顶，就称这个顶为王。顶的得分为顶胜利的次数。
+\end{dfnt}
+\begin{thr}
+赛图中得分最多的顶为王
+\end{thr}
+\begin{thr}
+赛图G中v为唯一王的充要条件是u得分为1，其中n是赛图顶数
+\end{thr}
+\subsection{有向Hamilton图}
+\begin{dfnt}
+$$\delta^- = \min_{v \in V(G)}\{d^-(v)\}$$
+$$\delta^+ = \min_{v \in V(G)}\{d^+(v)\}$$
+\end{dfnt}
+\begin{thr}[泛圈定理]
+设G是强连通竞赛图，$\forall u \in V(G)$，则G中存在k阶圈，u在此k阶圈上，k=$3,4,\cdots,|V(G)|$
+\end{thr}
+\begin{thr}
+设$P(u_0,v_0)$$|E(P(u_0,v_0))| \geq \max \{\delta^-,\delta^+\}$
+\end{thr}
+\begin{coro}
+严格有向图中有长度大于$\max\{\delta^+,\delta^-\}$的有向圈
+\end{coro}
+\begin{thr}
+$\min\{\delta^-,\delta^+\} \geq \frac{1}{2} |V(G)| >1$的严格有向图G是有向Hamilton图.
+\end{thr}
+\section{最大流算法}
+\subsection{2F算法}
+最大流问题的实际问题原型如下：
+
+把一种商品从产地通过铁路或公路运往市场，交通网络中每一路段的运输能力有一定限度.问如何安排运输，使得运输最快？
+
+图论模型如下：
+
+设G是弱连通严格有向加权图,$s \in V(G)$称为源,$t \in V(G) -\{s\}$称为汇,每边e之权c(e)称为边容量，这时称G上定义了一个网络，记成$N(G,s,t,c(e))$.在E(G)上定义一个函数$f(e):E \rightarrow \mathbb{R},f(e)$满足\[C(1) \quad 0\leq f(e)\leq c(e), \quad e \in E(G)\] \[C(2) \quad \sum_{e \in \alpha(v)} f(e) = \sum_{e\in \beta(v)} f(e),\quad v \in V(G)-\{s,t\}\]其中$\alpha(v)$是以v为头的边集，$\beta(v)$是以v为尾的边集，称上述函数为网络N上的流函数，简称流，称$$F=\sum_{e\in \alpha(t)}f(e)-\sum_{e\in \beta(t)}f(e)$$为流函数流量.
+
+目标是使F最大
+\begin{dfnt}
+设$S \subset V(G),s \in S,t \in \bar{S}=V(G)-S$.则称$(S,\bar{S})$是网络的一个截.\[C(S) = \sum_{e\in (S,\bar{S})}c(e)\]
+\end{dfnt}
+\begin{note}
+截量表示从S中的各站运往S以外各站的货物量的一个上界.由于除s与t外，其他站皆中转站，所以C(S)也就是单位时间从s运往t的货物量的一个上界.
+\end{note}
+\begin{thr}
+对于任一截$(S,\bar{S})$,成立公\[F = \sum_{e \in (S,\bar{S})}f(e) - \sum_{e\in (\bar{S},S)} f(e)\]
+\end{thr}
+\begin{coro}
+对任何流函数f和任意截($S,\bar{S}$)\[F \leq C(S)\]
+\end{coro}
+\begin{coro}
+若F=C(S),则F是最大流量，C(S)是最小截量.
+\end{coro}
+\begin{dfnt}[2F算法中的一些规定]
+\item (1).若$e=uv \in E(G)$,u已有标志，v尚未标志，且边e未满载，即c(e)>f(e),则称沿e可前向标志v，且规定$$\Delta (e) = c(e)-f(e)$$标志了边e.
+\item (2).若$e=xy \in E(G)$,y已有标志，而x尚未标志,且f(e)>0,则称沿e可向后标志顶x，且规定$$\Delta (e) = f(e)$$标志了边e.
+\end{dfnt}
+\begin{alg}[2F算法]
+\item (1)取初始流函数$f(e) = 0,\forall e \in E(G)$
+\item (2)标志顶s，其它顶未标志
+\item (3)选一个可向前或可向后标志的顶v，若选不到这种顶就中止，得到的就是最大流，若可选到v，就标志v且标志边e；若v=t，转(4),否则转(3).
+\item (4)设已得到一条标志了的无向轨$se_1v_1e_2v_2\cdots e_lt$，取$\Delta = \min \limits_{1 \leq i\leq l}\{\Delta (e_i)\}$，若在有向图G中$e_i=u_{i-1}v_i(s=v_0,t=v_l)$则\[f(e_i)\leftarrow f(e_i)+\Delta \]若$e_i$在有向图G中为$e_i = v_iv_{i-1}$则\[f(e_i)\leftarrow f(e_i)-\Delta\]
+\item (5)转(2)
+\end{alg}
+
+\begin{thr}
+2F算法终止时的流函数时最大流，其流量等于G中最小截量
+\end{thr}
+\begin{coro}[双最定理]
+f是最大流，$(S,\bar{S})$是最小截的充要条件是f的流量F等于$(S,\bar{S})$的截量C(S).
+\end{coro}
+\subsection{Dinic分层算法}
+2F算法在面对图中存在小权边时，每次增加的流量被小权边限制，从而要花费大量迭代才能求得最大流，Dinic算法则避免了这个缺点
+
+Dinic把2F的“沿e可向前标志”或“沿e可向后标志”的边e称为“有用边”
+\begin{alg}[Dinic分层算法]
+\item (1)$V_0 \leftarrow \{s\},i\leftarrow 0$
+\item (2)$T\leftarrow \{v|v \notin V_j,j\leq i,\text{且存在从$V_i$中某顶与v之间的有用边} \}$
+\item (3)若$T = \emptyset$,止，现在的流就是最大流
+\item (4)若$t\in T$,则$l\leftarrow i+1,V_l \leftarrow \{t\}$，止
+\item (5)令$V_{i+1}\leftarrow T$增大i,转(2)
+
+上述算法得到的$V_i$叫做第i层，仅相邻两层间有边，得到的网络叫层状网络.
+\end{alg}
+\begin{thr}
+若Dinic终止于(3),则现网络上的流f是最大流.
+\end{thr}
+若在(4)终止，就需要在已经分层的网络上求得最大流
+
+设原来网络中的流为f,$E_j$是层状网络中从$V_{j-1}$到$V_j$的边子集，若$e=uv \in E_j$
+\[
+\bar{c}(e) = \left \{
+\begin{array}{lll}
+c(e)-f(e) &u\in V_{j-1}&v\in V_{j}\\
+f(e) &v \in V_{j-1}&u\in V_{j}
+\end{array}
+\right.\]
+$\bar{c}$是$e=uv$上可增载的上界,我们把层状网络的边权取成$\bar{c}e$,取初始流$\bar{f}(e)=0$，且把层状网络上的边定向成从$V_{j-1}$到$V_j$(边的原来方向可能变成其反向)
+
+若在层状网络中，每条从s到t的轨$$sv_1v_2\cdots v_{l-1}t$$上至少有一边$e_j$,满足$\bar{f}(e_j) = \bar{c}(e_j)$,其中$v_j \in V_j,e_j \in E_j$，则称$\bar{f}$为层状网络上的一个极大流.
+
+层状网络上的极大流未必是最大流，但如果能求得层状网络的一个极大流，则可把原来网络上的流f改进成更大的流$f'$:
+\[
+f'(e)=\left \{
+\begin{array}{ll}
+f(e)+\bar{f}(e)&e=uv\in E(G),u\in V_{j-1},v\in V_j\\
+f(e)-\bar{f}(e)&e=vu\in E(G),u\in V_{j-1},v\in V_j\\
+f(e)&otherwise
+\end{array}
+\right.\]
+
+理论证明了每一轮分层层数严格增加，那么在有限轮后，算法必定在(3)终止，求得了最大流，下面只需要给出在层状网络求极大流的算法
+\begin{alg}[极大流算法]
+\item (1)把层状网络$\bar{N}$上每条边标志“未堵塞”,$\bar{f}\leftarrow 0$
+\item (2)$v\leftarrow s,S = \emptyset$
+\item (3)若无未堵塞的边$e=vu,$u在下一层，则执行
+\item (3.1)若s=v,止，$\bar{f}$即极大流
+\item (3.2)从S移除顶部的边e=uv
+\item (3.3)标志e堵塞,$v\leftarrow u$
+\item (3.4)转(3).
+\item (4)选一未堵塞的边e=vu,u在下一层,把e放入S,$v\leftarrow u$，若$v\neq t$，转(3)
+\item (5)S中的边构成一个可增载轨$$se_1v_1e_2\cdots v_{l-1}e_lt$$
+\item (5.1)$\Delta \leftarrow \min \limits{1\leq i \leq l}\{\bar{c}(e_i)-\bar{f}(e_i)\}$
+\item (5.2)对每个$1\leq i \leq l,\bar{f}(e_i)\leftarrow \bar{f}(e_i)+\Delta$,当$\bar{f}(e_i)=\bar{c}(e_i)$，标志$e_i$堵塞
+\item (5.3)转(2)
+\end{alg}
+\begin{note}
+具体实现应该要利用深度优先搜索，思想还是寻找增广轨
+\end{note}
+\subsection{有上下界网络的最大流算法}
+现在对于上一节中的问题模型，有向图G每边有了两个权$b(e),c(e)$，同时C1条件变为\[b(e)\leq f(e) \leq c(e)\]
+
+对这种网络，可能不存在流函数，需要先解决存在判定问题.
+
+\begin{dfnt}[伴随网络]
+N(G,s,t,b(e),c(e))的伴随网络N'(G'(V',E'),s',t',b'(e),c'(e)):
+\item (i)V' = $\{s',t'\}\cup V(G)$,其中$s',t' \notin V(G)$
+\item (ii)$\forall v \in V(G)$，加新边$e=vt'$，且令$c'(e)=\sum \limits_{e \in \beta(v)}b(e),c'(e)$是N'中e的容量上界，下界$b'(e)=0$
+\item (iii)$\forall v \in V(G)$，加新边$e=s'v$，且令$c'(e)=\sum \limits_{e \in \alpha(v)}b(e),c'(e)$是N'中e的上界，下界b'(e)=0
+\item (iv)E(G)中的边e在N'中仍保留,但权发生变化，下界变成0，上界$c'(e)=c'(e')=+\infty$
+\item (v)加新边e=st与e'=ts,且令e与e'的下界b'(e)=b'(e')=0，上界$c'(e)=c'(e)=+\infty$
+\end{dfnt}
+\begin{thr}
+N(G,s,t,b(e),c(e))存在可行流当且仅当伴随网络N'上的最大流f'使流出s'的一切边e皆满足f'(e)=c'(e).这时f'(e)+b(e)是N上一个可行流.
+\end{thr}
+\begin{note}
+由以上，得到求上下界网络N的最大流步骤：
+\item (1)求出N的伴随网络N'
+\item (2)求N'的最大流f'
+\item (3)检验f'是否使N'中出s'的边e皆满足f'(e)=c'(e),否则，无可行流，是，有可行流f(e)$$f(e)=f'(e)+b(e)$$
+\item (4)若已经得到可行流f(e),则基于f(e)用2F或Dinic求最大流(这时可以不考虑下界)
+\end{note}
+\section{连通度}
+\subsection{顶连通度}
 
 \end{document}
